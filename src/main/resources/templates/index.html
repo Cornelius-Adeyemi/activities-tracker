@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Task Page</title>
+  <!-- base:css -->
+  <link rel="stylesheet" th:href="@{/asset/vendors/mdi/css/materialdesignicons.min.css}">
+  <link rel="stylesheet" th:href="@{/asset/vendors/feather/feather.css}">
+  <link rel="stylesheet" th:href="@{/asset/vendors/base/vendor.bundle.base.css}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- endinject -->
+  <!-- inject:css -->
+  <link rel="stylesheet" th:href="@{/asset/css/style.css}">
+  <!-- endinject -->
+  <link rel="shortcut icon" th:href="@{/asset/images/favicon.png}" />
+  <style>
+  .edit-section > div{
+    display: flex;
+   
+    
+  }
+
+  .edit-section a{
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    margin: 2px;
+    text-decoration: none;
+
+    
+  }
+
+  .edit-section a:hover{
+    background-color: rgb(235, 233, 233);
+
+    
+  }
+
+  .button-section{
+    display: flex;
+    width:100% ;
+    max-width: 1000px ;
+    justify-content: space-between;
+  }
+
+  .button-section span{
+    margin: 5px 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+  
+  .button-section div{
+   display: flex;
+  }
+ 
+
+  .button-section a{
+       padding: 10px 5px;
+       display: block;
+    text-decoration: none;
+    color: black;
+  }
+  .button-section a:hover{
+   background-color: rgb(233, 231, 231);
+   cursor: pointer;
+    text-decoration: none;
+    color: black;
+  }
+
+  i:hover{
+    cursor: pointer;
+  }
+  .button-container{
+    display: flex;
+    justify-content: center;
+  }
+  .delete{
+    color: red;
+  }
+
+  tr{
+    border-bottom: 1px solid rgb(136, 136, 136);
+  }
+
+  .status span{
+    display: inline-block;
+    width:105px;
+    font-weight: bold;
+    color: black;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px ;
+  }
+  .pending{
+    background-color: red;
+  }
+
+  .complete{
+    background-color: #18f318;
+  }
+  .prog{
+    background-color: yellow;
+    padding: 2px;
+    display: inline-block;
+  }
+
+  tr> a{
+    text-decoration: none;
+    color: black;
+  }
+
+  </style>
+
+</head>
+
+<body >
+  <div class="button-container">
+      <div class="button-section">
+        <div>
+      <span><a href="/addtask">Add task</a></span>
+      <span><a href="/">All Tasks</a></span>
+      <span><a href="/pending">Pending Tasks</a></span>
+          <span><a href="/progress">In Progress</a></span>
+          <span><a href="/complete">Completed Tasks</a></span> </div>
+      <span><a href="/user/logout" class="logout">Logout</a></span>
+
+      </div>
+    </div>
+
+     
+      <!-- partial -->
+      <div  style="width:100% !important" class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <h1 style="text-align: center;">Welcome, [[${name}]]</h1>
+                <div class="card-body">
+                  <h4 class="card-title">[[${name}]], Your task list</h4>
+                  <p class="card-description">
+                   
+                  </p>
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Title</th>
+                          <th>Description</th>
+                          <th>Created Date</th>
+                          <th>Last Update</th>
+                          <th>Completed Date</th>
+                          <th>Status</th>
+                          <th>Edit Section</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr th:each=" task : ${tasks} ">
+                          <td> <a th:href="@{/view/{taskId}(taskId=${task.getTask_id()}, status=${status})}" th:text="${ task.getTitle().length() < 20 ? task.getTitle() :task.getTitle().substring(0,20) + '...'}"></a></td>
+                         <td> <a th:href="@{/view/{taskId}(taskId=${task.getTask_id()}, status=${status})}" th:text="${ task.getDescription().length()< 20 ? task.getDescription() : task.getDescription().substring(0, 20) + ' ...'}"></a></td>
+                        <td th:text="${task.getCreateddate()}"></td>
+                        <td th:text="${task.getLastedited()}"></td>
+                        <td  th:text="${task.getCompleted()}"></td>
+                          <td class="status"><span th:class="${
+                          task.getStatus().name().equalsIgnoreCase('PENDING')?'pending':(task.getStatus().name().equalsIgnoreCase('COMPLETED')? 'complete' :'prog')
+                          }" th:text="${task.getStatus()}"></span></td>
+                          <td class="edit-section">
+                            <div>
+                              <span> <a th:href="@{/edit/{taskId}(taskId=${task.getTask_id()},status=${status})}" title="Edit"> <i class="fa fa-pencil" aria-hidden="true"></i></a></span>
+                             <span> <a th:href="@{/delete/{taskId}(taskId=${task.getTask_id()})}" title="Delete" class="delete"> <i class="fa fa-trash" aria-hidden="true"></i> </a></span>
+
+                            </div>
+                            <div>
+                              <span><a th:href="@{/moveback/{taskId}(taskId=${task.getTask_id()})}"  title="move status backward"> <i class="fa fa-chevron-left" aria-hidden="true"></i></a></span>
+                              <span> <a th:href="@{/move/{taskId}(taskId=${task.getTask_id()})}" title="move status forward" > <i class="fa fa-chevron-right" aria-hidden="true"></i></a></span>
+                            </div>
+                          
+                          </td>
+                           
+                        </tr>
+
+
+                       
+                      </tbody>
+                    </table>
+                    <div th:if="${totalPage>1}" style="text-align: center; font-weight: bold; display: flex; justify-content: center;margin: 20px 0 ">
+                      <span style="color:blue; margin-right: 50px">  Total Tasks: [[${totalTasks}]]  </span>
+                      <span th:each="i : ${#numbers.sequence(1, totalPage)}">
+         <span style="color:blue;margin: 0 10px" th:if="${ i < currentPage && (currentPage -i) <=3 }">    <a th:href="@{/paging/{id}(id=${i}, status=${status})}"  th:text="${'<<'+ i}"> </a></span>
+               <span style="font-weight: bold;color: black;margin: 0 3px" th:if="${currentPage ==i }" th:text="${i}"></span>
+            <span style="color:blue;margin: 0 10px" th:if="${ i > currentPage && ( i - currentPage) <=3 }">    <a th:href="@{/paging/{id}(id=${i},status=${status})}"  th:text="${ i + '>>'}"> </a></span>
+           </span>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            
+            
+            
+          </div>
+        </div>
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard templates</a> from Bootstrapdash.com</span>
+          </div>
+        </footer>
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+   
+  <!-- container-scroller -->
+  <!-- base:js -->
+  <script th:src="@{/asset/vendors/base/vendor.bundle.base.js}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page-->
+  <!-- End plugin js for this page-->
+  <!-- inject:js -->
+  <script th:src="@{/asset/js/off-canvas.js}"></script>
+  <script th:src="@{/asset/js/hoverable-collapse.js}"></script>
+  <script th:src="@{/asset/js/template.js}"></script>
+  <!-- endinject -->
+  <!-- plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- Custom js for this page-->
+  <!-- End custom js for this page-->
+</body>
+
+</html>

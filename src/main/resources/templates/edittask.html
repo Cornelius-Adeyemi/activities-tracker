@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+<style>
+body{
+    background-color: greenyellow;
+}
+
+.title{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+.title input{
+    width: 400px;
+    height: 30px;
+}
+.description textarea{
+    width: 400px;
+}
+.form-container{
+   
+    display: flex;
+    justify-content: center;
+}
+
+.submit{
+    width: 150px;
+    height: 35px;
+}
+.submit-container{
+    width: 400px;
+    display: flex;
+    justify-content: center;
+}
+.home{
+    display: inline-block;
+    padding: 10px 15px ;
+    cursor: pointer;
+}
+
+.home:hover{
+    background-color: rgb(202, 202, 202);
+}
+
+</style>
+
+</head>
+<body>
+    
+ <div class="">
+<p style="text-align: center;"> <span class="home"><a style="text-decoration: none; color: black; font-weight: bold" href="/">Home</a></span></p>
+<h2 style="text-align: center;"> Edit Task</h2>
+<div class="form-container">
+ <form th:object="${task}" method="post" th:action="@{/edit(status=${status })}">
+    <input type="hidden" th:field="*{id}" />
+
+   <div class="title">
+    <label for="title"> Title</label>
+    <input type="text" name="title" id="title" required placeholder="Enter Title" th:field="*{title}">
+
+   </div>
+   <div class="description">
+   
+   <textarea rows="10" placeholder="Enter task description" required th:field="*{description}" ></textarea>
+
+   </div>
+   <div class="submit-container">
+   <input type="submit" value="Edit Task" class="submit"></div>
+
+ </form>
+
+
+</div>
+
+ </div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>view Task</title>
+<style>
+body{
+    background-color: greenyellow;
+}
+
+
+.home{
+    display: inline-block;
+    padding: 10px 15px ;
+    cursor: pointer;
+}
+
+.home:hover{
+    background-color: rgb(202, 202, 202);
+}
+.title{
+    width:400px;
+    height: 30px;
+    background-color: white;
+}
+
+.description{
+    width: 400px;
+    height:300px;
+    background-color: white;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+   
+    align-items: center;
+}
+
+</style>
+
+</head>
+<body>
+    
+ <div class="">
+<p style="text-align: center;"> <span class="home"><a style="text-decoration: none; color: black; font-weight: bold" href="/">Home</a></span></p>
+<h2 style="text-align: center;"> view Task</h2>
+<div class="container">
+ <p class="title" th:text="${task.getTitle()}"></p>
+ <p class="description" th:text="${task.getDescription()}"></p>
+
+    <span> <a th:href="@{/view/back(status=${status})}"> Back </a> </span>
+
+</div>
+
+ </div>
+
+
+
+
+</body>
+</html>
